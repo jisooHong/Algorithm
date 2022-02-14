@@ -1,0 +1,34 @@
+https://www.acmicpc.net/problem/16953
+bfs
+
+```python3
+import sys
+from collections import deque
+
+a,b = map(int,sys.stdin.readline().split())
+
+dq = deque()
+
+dq.appendleft((a,1))
+cnt = 0
+flag = 0
+while dq:
+    p = dq.pop()
+
+    pop = p[0]
+    cnt = p[1]
+
+    if pop == b:
+        flag  = 1
+        answer = cnt
+        break
+    if pop < b:
+        dq.appendleft((pop*2,cnt+1))
+        dq.appendleft((int(str(pop)+"1"),cnt+1))
+
+if flag == 0:
+    print(-1)
+else:
+    print(answer)
+
+```
