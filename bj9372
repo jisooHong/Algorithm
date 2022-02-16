@@ -1,0 +1,45 @@
+https://www.acmicpc.net/problem/9372
+
+모든 점은 연결되어있으니 N-1이 정답 , 하지만 bfs로 풀어봄   
+한 국가에 도착하면 cnt+1 해주기 
+
+
+```python3
+import sys
+import copy
+from collections import deque
+
+t = int(input())
+
+for _ in range(t):
+    n,m = map(int,sys.stdin.readline().split())
+    ll = [[] for _ in range(n+1)]
+    for _ in range(m):
+        a,b = map(int,sys.stdin.readline().split())
+        ll[a].append(b)
+        ll[b].append(a)
+
+    answer = n * 2
+
+    visited = [0 for _ in range(n+1)]
+    dq = deque()
+
+    visited[0] = 1
+    visited[1] = 1
+    dq.appendleft(1)
+
+    cnt = 0
+    while dq:
+        country = dq.pop()
+
+        # 모든 방문했는지 검사, 방문했다면 append안해줘도됨
+        if 0 not in visited:
+            print(cnt)
+            break
+
+        for i in ll[country]:
+            if visited[i] == 0:
+                visited[i] = 1
+                dq.appendleft(i)
+                cnt+=1
+```
