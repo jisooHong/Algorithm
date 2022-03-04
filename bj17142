@@ -1,0 +1,83 @@
+## 17142. 연구소3
+
+시간초과, ,, ,, , , ,, , ,,다음에 풀어보기... .ㅠ
+
+```python3
+import sys
+import copy
+from itertools import combinations
+from collections import deque
+
+n,m = map(int,sys.stdin.readline().split())
+
+matrix = []
+result_matrix = []
+"""
+0 - 빈칸 
+1 - 벽 -> '-' 로 변경
+2 - 바이러스 놓을 수 있는 위치
+
+* - 바이러스 활성화 위치
+모든 칸이 숫자 혹은 * 이면 바이러스가 모두 퍼진것
+"""
+for _ in range(n):
+    matrix.append(list(sys.stdin.readline().strip().split()))
+for i in range(n):
+    for j in range(n):
+        if matrix[i][j] == '1':
+            matrix[i][j] = '-'
+        elif matrix[i][j] == '0':
+            matrix[i][j] = '-1'
+        elif matrix[i][j] == '2':
+            matrix[i][j] = '*'
+
+# matrix.replace('1','-') # 벽을 -로 대체
+# matrix.replace('0','-1') # 빈칸을 -1로 대체
+# matrix.replace('2','*') # 바이러스 놓을 수 있는 위치를 *로 대체
+
+virus_location = []
+for i in range(n):
+    for j in range(n):
+        if matrix[i][j] == '*':
+            # virus_cnt += 1
+            virus_location.append((i,j))
+# 여러 바이러스 위치 중 M개 뽑기
+virus_combinations = list(combinations(virus_location,m))
+answer = float('inf')
+flag = 0
+for virus in virus_combinations:
+    # print(virus)
+    copy_matrix = copy.deepcopy(matrix)
+    dq = deque()
+    for i in range(m):
+        x,y = virus[i][0], virus[i][1]
+        copy_matrix[x][y] = '0' # 시작점
+        dq.appendleft((x,y))
+    # print("init",copy_matrix)
+    result = 0
+    while dq:
+        # 상하좌우 바이러스 뿌리기
+        x,y = dq.pop()
+        if all('-1' not in l for l in copy_matrix):
+            answer = min(answer,result)
+            flag = 1
+            break
+        dx = [1,-1,0,0]
+        dy = [0,0,1,-1]
+
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+
+            if 0 <= nx < n and 0 <= ny < n:
+                if copy_matrix[nx][ny] == '-1' or copy_matrix[nx][ny] == '*':
+                    if copy_matrix[nx][ny] == '-1':
+                        result = max(int(copy_matrix[x][y]) + 1, result)
+                    copy_matrix[nx][ny] = str(int(copy_matrix[x][y]) + 1)
+
+                    dq.appendleft((nx,ny))
+if flag == 0:
+    print(-1)
+else:
+    print(answer)
+```
