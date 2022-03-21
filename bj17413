@@ -1,0 +1,31 @@
+```python3
+
+s = input()
+
+open = 0
+result = ""
+word = ""
+for i in s:
+    if i == "<":
+        result += "".join(reversed(word))
+        open = 1
+        result += i
+        word = ""
+    elif i == ">":
+        open = 0
+        result += i
+    elif open == 1:
+        result += i
+    elif open == 0 and i != " ":
+        word += i
+
+    if i == " " and open == 0:
+        result += ''.join(reversed(word)) + " "
+        word = ""
+if word != "":
+    result += "".join(reversed(word))
+
+print(result)
+
+```
+어찌저찌 풀긴했는데 너무 복잡.. 간단하게 바꿀방ㅇ법생각하기
