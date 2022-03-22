@@ -1,0 +1,47 @@
+전깃줄..
+```python3
+# 가장 많이 꼬인 선부터 제거하는 방식으로 풀었는데,,,,틀림 ㅠㅅㅠ 
+# https://www.acmicpc.net/board/view/84972 반례참고해서 다시풀기,,
+
+import sys
+
+n = int(input())
+lines = []
+cross_matrix = [[0 for _ in range(500)] for _ in range(500)]
+
+for i in range(n):
+    a,b = map(int,sys.stdin.readline().strip().split())
+    lines.append([a,b])
+
+lines.sort() # 시작점을 기준으로 정렬
+# print(lines)
+for i in range(n):
+    i_start = lines[i][0]
+    i_end = lines[i][1]
+    for j in range(i+1,n):
+        j_start = lines[j][0]
+        j_end = lines[j][1]
+        if i_start < j_start and i_end < j_end:
+            continue
+        cross_matrix[i_start-1][j_start-1] = 1
+        cross_matrix[j_start-1][i_start-1] = 1
+
+answer = 0
+max_cross_index = 0
+while True:
+    max_cross = 0
+    for index,value in enumerate(cross_matrix):
+        cross_cnt = sum(value)
+        if max_cross < cross_cnt:
+            max_cross = cross_cnt
+            max_cross_index = index
+    if max_cross == 0:
+        break
+    for i in range(500):
+        if cross_matrix[max_cross_index][i] == 1:
+            cross_matrix[max_cross_index][i] = 0
+            cross_matrix[i][max_cross_index] = 0
+    answer += 1
+
+print(answer)
+```
